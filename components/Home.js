@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react'
 import { View, Text, Image, StatusBar } from 'react-native';
+import { hideNavigationBar } from 'react-native-navigation-bar-color';
+import { useHistory } from 'react-router-dom';
 
 const Home = () => {
+    useEffect(() => {
+        hideNavigationBar();
+    });
+    
+    let history = useHistory();
+    setTimeout(() => history.replace("/mode"), 5000);
+
     return (
         <>
-            <StatusBar translucent backgroundColor="#292929" />
-            <View style={{ position: 'relative', flex: 1, alignItems: 'center', justifyContent: 'flex-end' }}>
-                <View style={{ position: 'absolute', width: "100%", flex: 1, backgroundColor: '#fff', zIndex: 100 }} />
+            <StatusBar hidden={true} />
+            <View style={{ position: 'relative', flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <Image source={require('../assets/home_bg.jpg')} style={{ width: '100%', height: '100%', position: 'absolute' }} />
-                <Text style={{ fontSize: 24, fontWeight: 'bold', color: '#eee', textTransform: 'uppercase', borderBottomWidth: 2, borderBottomColor: '#eee' }}>Progress Is Progress</Text>
-                <Text style={{ textTransform: 'uppercase', fontWeight: 'bold', letterSpacing: 2, color: '#eee', fontSize: 20, marginBottom: 60 }}>No matter how small</Text>
+                <View style={{ position: "absolute", bottom: '7%', left: '3%', alignItems: 'center', flexDirection: 'row', flex: 1 }}>
+                    <Image source={require('../assets/icon.png')} style={{ borderRadius: 80, width: 80, height: 80, marginHorizontal: 15 }} />
+                    <View>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#eee', textTransform: 'uppercase' }}>Progress Is Progress</Text>
+                        <Text style={{ textTransform: 'uppercase', color: '#eee', fontSize: 20, borderBottomWidth: 0.5, borderBottomColor: '#eee' }}>No matter how small</Text>
+                    </View>
+                </View>
             </View>
         </>
     );
