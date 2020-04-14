@@ -1,16 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { View, Text, Image, StatusBar } from 'react-native';
 import { hideNavigationBar } from 'react-native-navigation-bar-color';
-import { useHistory } from 'react-router-dom';
 
 const Home = () => {
-    useEffect(() => {
-        hideNavigationBar();
-    });
-    
-    let history = useHistory();
-    setTimeout(() => history.replace("/mode"), 5000);
-
+    hideNavigationBar();
     return (
         <>
             <StatusBar hidden={true} />

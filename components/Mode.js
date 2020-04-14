@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { View, Text, StatusBar, BackHandler, Image } from 'react-native';
+import { View, Text, StatusBar, Image } from 'react-native';
 import { showNavigationBar } from 'react-native-navigation-bar-color';
 
-export default class Mode extends Component {
+class Mode extends Component {
     componentDidMount() {
         showNavigationBar();
-        BackHandler.addEventListener('hardwareBackPress', () => BackHandler.exitApp());
     }
 
     render() {
@@ -13,7 +12,8 @@ export default class Mode extends Component {
             <>
                 <StatusBar barStyle='dark-content' backgroundColor="#fff" />
                 <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                    <Text style={{ fontSize: 30, fontWeight: "bold", marginBottom: 30 }}>Select Workout Mode</Text>
+                    <Text style={{ fontSize: 30, fontWeight: "bold" }}>Workout Modes</Text>
+                    <Text style={{ marginBottom: 30, color: "#aaa", fontSize: 18, marginBottom: 30, marginHorizontal: 70, textAlign: 'center' }}>Select any one workout mode to continue.</Text>
                     
                     <View style={{ marginBottom: 20, elevation: 10, backgroundColor: "#fff", borderRadius: 15 }}>
                         <Image source={require('../assets/mode_1.jpg')} style={{ width: 300, height: 150, borderRadius: 15, position: 'relative' }} />
@@ -37,3 +37,5 @@ export default class Mode extends Component {
         );
     }
 }
+
+export default Mode;

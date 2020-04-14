@@ -1,17 +1,15 @@
 import React from "react";
-import { NativeRouter, Route, BackButton } from "react-router-native";
 
 import Home from './components/Home';
 import Mode from './components/Mode';
+import Exercises from "./components/Exercises";
 
 const App = () => {
   return (
-    <NativeRouter>
-      <BackButton />
-      <Route exact path="/" component={Home}  />
-      <Route path="/mode" component={Mode} />
-    </NativeRouter>
-  )
+    // <Home />
+    // <Mode />
+    <Exercises />
+  );
 }
 
 export default App;
