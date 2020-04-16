@@ -5,6 +5,7 @@ import Mode from './components/Mode';
 import Exercises from "./components/Exercises";
 import Break from "./components/Break";
 import Exercise from "./components/Exercise";
+import Finish from "./components/Finish";
 
 const App = () => {
   return (
@@ -12,7 +13,8 @@ const App = () => {
     // <Mode />
     // <Exercises />
     // <Break />
-    <Exercise />
+    // <Exercise />
+    <Finish />
   );
 }
 
