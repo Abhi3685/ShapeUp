@@ -9,12 +9,15 @@ import Finish from "./components/Finish";
 
 const App = () => {
   return (
-    // <Home />
-    // <Mode />
-    // <Exercises />
-    // <Break />
-    <Exercise />
-    // <Finish />
+    <>
+      {/* <KeepAwake /> */}
+      {/* <Home /> */}
+      {/* <Mode /> */}
+      {/* <Exercises /> */}
+      {/* <Break /> */}
+      <Exercise />
+      {/* <Finish /> */}
+    </>
   );
 }
 
