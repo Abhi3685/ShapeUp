@@ -13,8 +13,8 @@ const App = () => {
     // <Mode />
     // <Exercises />
     // <Break />
-    // <Exercise />
-    <Finish />
+    <Exercise />
+    // <Finish />
   );
 }
 

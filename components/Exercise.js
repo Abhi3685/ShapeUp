@@ -32,21 +32,21 @@ const Exercise = () => {
 
     return (
         <>
-            <StatusBar barStyle='dark-content' backgroundColor="#fff" />
+            <StatusBar barStyle='dark-content' backgroundColor="#28313B" />
+
+            <View style={{ position: 'absolute', width: '100%', height: '55%', backgroundColor: '#28313B', borderBottomLeftRadius: 15, borderBottomRightRadius: 15 }}></View>
 
             <View style={{ alignItems: 'center', flex: 1, justifyContent: 'space-between', marginBottom: 25 }}>
-                <Icon name="keyboard-arrow-left" size={40} color="#000" style={{ position: "absolute", left: 10, top: 15 }} />
-                
-                <Text style={{ fontSize: 20, marginTop: 60 }}>Exercise 8/10</Text>
-                
-                <Image source={require('../assets/cardio_3.gif')} style={{ width: '88%', height: 280 }} />
-                
+                <Icon name="keyboard-arrow-left" size={40} color="#fff" style={{ position: "absolute", left: 10, top: 15 }} />
+                <Text style={{ fontSize: 20, marginTop: 20, color: '#fff' }}>Exercise 8/10</Text>
+                <View style={{ width: '88%', alignItems: 'center', marginTop: 20 }}>
+                    <Image source={exercise.gif} resizeMode="cover" style={{ height: 280 }} />
+                </View>
                 <View style={{ alignItems: 'center' }}>
-                    <Text style={{ textTransform: 'uppercase', fontSize: 28, fontWeight: 'bold' }}>{ exercise.name }</Text>
+                    <Text style={{ textTransform: 'uppercase', fontSize: 28, fontWeight: 'bold', marginTop: 50 }}>{ exercise.name }</Text>
                     <Text style={{ paddingHorizontal: 45, textAlign: 'justify', marginTop: 10, fontSize: 15, color: '#aaa' }}>{ exercise.desc }</Text>
                     <Text style={{ fontSize: 60, fontWeight: 'bold', color: '#aaa' }}>{ exercise.reps ? 'x ' + exercise.reps : seconds + 's' }</Text>
                 </View>
-                
                 <LinearGradient
                     colors={['#28313B', '#485461']}
                     style={{ borderRadius: 15 }}
