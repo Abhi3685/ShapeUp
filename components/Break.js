@@ -41,7 +41,7 @@ const Break = () => {
 
             <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: '70%', paddingHorizontal: 15, paddingVertical: 8 }}>
-                    <Text style={{ color: '#aaa', fontSize: 18 }}>Next Exercise</Text>
+                    <Text style={{ color: '#aaa', fontSize: 18 }}>Up Next</Text>
                     <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Jumping Jacks</Text>
                     <Text style={{ color: '#00f', fontSize: 18, fontWeight: 'bold' }}>x10</Text>
                 </View>

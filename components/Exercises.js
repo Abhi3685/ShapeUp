@@ -3,7 +3,7 @@ import { View, StatusBar, Image, Text, Modal, TouchableOpacity, FlatList } from 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 
-const Exercises = () => {
+const Exercises = ({ navigation }) => {
     const cardio_exercises = [
         {
             id: 1,
@@ -88,7 +88,7 @@ const Exercises = () => {
                 <Image source={require('../assets/mode_1.jpg')} style={{ width: '100%', height: 180, borderBottomLeftRadius: 15, borderBottomRightRadius: 15 }} />
                 <Text style={{ position: "absolute", color: "#fff", bottom: 40, left: 20, fontSize: 23, fontWeight: "bold" }}>Cardio Warmup</Text>
                 <Text style={{ position: "absolute", color: "#fff", bottom: 20, left: 20, fontSize: 16 }}>Estimated Duration: 10 - 15 Minutes</Text>
-                <Icon name="keyboard-arrow-left" size={40} color="#fff" style={{ position: "absolute", left: 5, top: 15 }} />
+                <TouchableOpacity style={{ position: "absolute", left: 5, top: 15 }} onPress={() => navigation.goBack()}><Icon name="keyboard-arrow-left" size={40} color="#fff" /></TouchableOpacity>
             </View>
 
             <FlatList
@@ -97,7 +97,7 @@ const Exercises = () => {
                 renderItem={( { item: exercise, index } ) => (
                     <TouchableOpacity onPress={() => { setModalDataIdx(index); setIsModalVisible(true); }}>
                         <View style={{ flex: 1, flexDirection: 'row', marginHorizontal: 10, borderRadius: 10, borderBottomWidth: 1, borderBottomColor: '#aaa', paddingVertical: 10 }}>
-                            <Image source={exercise.gif} style={{ width: '30%', height: 80 }} />
+                            <Image resizeMode="cover" source={exercise.gif} style={{ width: '30%', height: 80 }} />
                             <View style={{ paddingLeft: 20 }}>
                                 <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 5 }}>{exercise.name}</Text>
                                 <Text style={{ fontSize: 18, marginTop: 10, color: '#aaa' }}>{exercise.time ? '00:' + exercise.time : 'x' + exercise.reps}</Text>
@@ -113,7 +113,11 @@ const Exercises = () => {
                         colors={['#28313B', '#485461']}
                         style={{ borderRadius: 15 }}
                     >
-                        <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }}>
+                        <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }}
+                            onPress={() => navigation.navigate('Exercise', {
+                                mode: '1',
+                                id: 0
+                            })}>
                             <Text style={{ fontSize: 17, color: '#fff', padding: 4 }}>Start Workout</Text>
                         </TouchableOpacity>
                     </LinearGradient>

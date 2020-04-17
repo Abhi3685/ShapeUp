@@ -1,9 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { View, Text, Image, StatusBar } from 'react-native';
 import { hideNavigationBar } from 'react-native-navigation-bar-color';
 
-const Home = () => {
-    hideNavigationBar();
+const Home = ({ navigation }) => {
+    useEffect(() => {
+        hideNavigationBar();
+        setTimeout(() => {
+            navigation.replace('Mode');
+        }, 5000);
+    }, []);
+
     return (
         <>
             <StatusBar hidden={true} />
