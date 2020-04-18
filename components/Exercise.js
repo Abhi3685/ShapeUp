@@ -5,103 +5,42 @@ import LinearGradient from 'react-native-linear-gradient';
 import SoundPlayer from 'react-native-sound-player';
 import KeepAwake from 'react-native-keep-awake';
 
-SoundPlayer.playSoundFile('bg_audio', 'mp3');
-AppState.addEventListener('change', function(currentAppState) {
-    if(currentAppState == "background") {
-        SoundPlayer.pause();
-    } 
-    if(currentAppState == "active") {
-        SoundPlayer.resume();
-    }
-});
+import cardio_exercises from '../data/cardio';
 
-const Exercise = ({ route, navigation }) => {
-    const cardio_exercises = [
-        {
-            id: 1,
-            name: 'Jumping Jacks',
-            desc: 'Repeatedly jumping the feet wide while circling the arms overhead. It requires no special equipment or skills.',
-            reps: 30,
-            gif: require('../assets/cardio_1.gif')
-        },
-        {
-            id: 2,
-            name: 'Jog in Place',
-            desc: 'Jogging in a stationary position. It\'s simple, accessible, gets the heart rate up, and is a great way to warm up for more intense exercise.',
-            time: 40,
-            gif: require('../assets/cardio_2.gif')
-        },
-        {
-            id: 3,
-            name: 'Burpees',
-            desc: 'Squatting to the floor, jumping the feet to a plank position, jumping back in, and standing up. It\'s a killer cardio exercise.',
-            reps: 20,
-            gif: require('../assets/cardio_3.gif')
-        },
-        {
-            id: 4,
-            name: 'Mountain Climbers',
-            desc: 'Running the knees in and out from a push-up position. Mountain climbers raise the heart rate while building strength and endurance in the core.',
-            time: 40,
-            gif: require('../assets/cardio_4.gif')
-        },
-        {
-            id: 5,
-            name: 'Jump Lunges',
-            desc: 'Simply lunge forward on your left leg as you bring your right arm forward and left arm back, elbows bent at 90-degree angles. From the lunge, jump straight into the air as you switch your arm and leg positions, then land with the opposite arm and leg in front.',
-            time: 30,
-            gif: require('../assets/cardio_5.gif')
-        },
-        {
-            id: 6,
-            name: 'Plank Jacks',
-            desc: 'Start with your hands under shoulders and your body straight. Bring your feet together. Jump and spread your legs wider than shoulder width. Jump back and repeat.',
-            time: 30,
-            gif: require('../assets/cardio_6.gif')
-        },
-        {
-            id: 7,
-            name: 'Inchworm crawl',
-            desc: 'Plant your feet and slowly walk your hands forward into a plank with your hands under your shoulders. Then, Slowly walk your hand toward your feets.',
-            time: 15,
-            gif: require('../assets/cardio_7.gif')
-        },
-        {
-            id: 8,
-            name: 'Squat Jumps',
-            desc: 'You start out in a squat and then jump up, trying to get as high as possible, and then land back in the squat.',
-            reps: 20,
-            gif: require('../assets/cardio_8.gif')
-        },
-        {
-            id: 9,
-            name: 'Skaters',
-            desc: 'Stand with feet hip-width apart and keep a slight bend in knees. Jump to the right with right foot, landing lightly on the ball of right foot and sweeping left foot behind right leg.',
-            time: 30,
-            gif: require('../assets/cardio_9.gif')
-        },
-        {
-            id: 10,
-            name: 'Kickboxing',
-            desc: 'Punching, kicking, and combinations thereof against a bag, the air, or (risky) another person. It can help you get out your aggressions.',
-            time: 40,
-            gif: require('../assets/cardio_10.gif')
-        }
-    ];
-
+const Exercise = ({ navigation }) => {
     const [exercise, setExercise] = useState({
         name: '',
         desc: '',
-        time: 0,
+        reps: 0,
         gif: require('../assets/cardio_1.gif')
     });
-    const [seconds, setSeconds] = useState(exercise.time ? exercise.time : 0);
+    const [seconds, setSeconds] = useState(exercise.time ? exercise.time : -1);
     const [isActive, setIsActive] = useState(true);
-    const { mode, id } = route.params;
-
+    const [id, setId] = useState(-1);
+    
     useEffect(() => {
-        setExercise(cardio_exercises[id]);
-    }, []);
+        const unsubscribe = navigation.addListener('focus', () => {
+            setId(id => {
+                setExercise(() => {
+                    let exercise = cardio_exercises[id+1];
+                    if(exercise.time) setSeconds(exercise.time);
+                    return exercise;
+                });
+                return id + 1;
+            });
+            // SoundPlayer.playSoundFile('bg_audio', 'mp3');
+            // AppState.addEventListener('change', function(currentAppState) {
+            //     if(currentAppState == "background") {
+            //         SoundPlayer.pause();
+            //     } 
+            //     if(currentAppState == "active") {
+            //         SoundPlayer.resume();
+            //     }
+            // });
+        });
+    
+        return unsubscribe;
+    }, [navigation]);
 
     useEffect(() => {
         let interval = null;
@@ -115,9 +54,10 @@ const Exercise = ({ route, navigation }) => {
         if (seconds == 0){
             // Redirect to break screen
             clearInterval(interval);
+            id+1 === cardio_exercises.length ? navigation.navigate('Finish') : navigation.navigate('Break', { mode: 1, id: id + 1 })
         }
         return () => clearInterval(interval);
-      }, [isActive, seconds]);
+    }, [isActive, seconds]);
 
     return (
         <>
@@ -141,7 +81,7 @@ const Exercise = ({ route, navigation }) => {
                     style={{ borderRadius: 15 }}
                 >
                     { exercise.reps ? 
-                    <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }} onPress={() => id+1 === cardio_exercises.length ? navigation.navigate('Finish') : navigation.navigate('Break', { mode: 1, id: id + 2 }) }>
+                    <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }} onPress={() => id+1 === cardio_exercises.length ? navigation.navigate('Finish') : navigation.navigate('Break', { mode: 1, id: id + 1 }) }>
                         <Text style={{ color: '#fff', paddingVertical: 4, paddingHorizontal: 50 }}> 
                             <Icon name="done" size={30} color="#fff" />
                         </Text>

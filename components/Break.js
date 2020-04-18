@@ -2,8 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { View, StatusBar, Image, Text, TouchableOpacity } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient';
 
-const Break = () => {
+import cardio_exercises from '../data/cardio';
+
+const Break = ({ route, navigation }) => {
     const [timeLeft, setTimeLeft] = useState(30);
+    const { mode, id } = route.params;
+    const exercise = cardio_exercises[id];
 
     useEffect(() => {
         let interval = null;
@@ -13,10 +17,11 @@ const Break = () => {
             }, 1000);
         } else {
             // Redirect to next exercise
+            navigation.goBack()
             clearInterval(interval);
         }
         return () => clearInterval(interval);
-      }, [timeLeft]);
+    }, [timeLeft]);
 
     return (
         <>
@@ -33,7 +38,8 @@ const Break = () => {
                     colors={['#28313B', '#485461']}
                     style={{ borderRadius: 15, width: '40%' }}
                 >
-                    <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }}>
+                    <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }}
+                        onPress={() => navigation.goBack()}>
                         <Text style={{ fontSize: 17, color: '#fff', padding: 4 }}>Skip</Text>
                     </TouchableOpacity>
                 </LinearGradient>
@@ -42,10 +48,10 @@ const Break = () => {
             <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: '70%', paddingHorizontal: 15, paddingVertical: 8 }}>
                     <Text style={{ color: '#aaa', fontSize: 18 }}>Up Next</Text>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold' }}>Jumping Jacks</Text>
-                    <Text style={{ color: '#00f', fontSize: 18, fontWeight: 'bold' }}>x10</Text>
+                    <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{exercise.name}</Text>
+                    <Text style={{ color: '#00f', fontSize: 18, fontWeight: 'bold' }}>{ exercise.reps ? 'x' + exercise.reps : '00:' + exercise.time }</Text>
                 </View>
-                <Image source={require('../assets/cardio_1.gif')} style={{ width: '30%', height: 100 }} />
+                <Image source={exercise.gif} style={{ width: '30%', height: 100 }} />
             </View>
         </>
     );
