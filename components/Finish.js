@@ -1,12 +1,24 @@
-import React, { useState, useEffect } from 'react'
-import { View, StatusBar, Image, Text, TouchableOpacity } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import { View, StatusBar, Image, Text, TouchableOpacity, Alert, BackHandler } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-community/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const Finish = ({ navigation }) => {
     const [duration, setDuration] = useState("");
     const [exercises, setExercises] = useState("0");
+
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = () => {
+                Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => navigation.navigate('Mode') }]); 
+                return true;
+            };
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+            return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        })
+    );
 
     useEffect(() => {
         AsyncStorage.getItem('StartTime').then(start => {
@@ -36,7 +48,7 @@ const Finish = ({ navigation }) => {
                         <Text style={{ color: '#fff', fontSize: 22 }}>{ duration }</Text>
                     </View>
 
-                    <Icon name="keyboard-arrow-left" size={40} color="#fff" style={{ position: "absolute", left: 5, top: 15 }} />
+                    <TouchableOpacity style={{ position: "absolute", left: 5, top: 15 }} onPress={() => navigation.navigate('Mode')}><Icon name="keyboard-arrow-left" size={40} color="#fff" /></TouchableOpacity>
                 </View>
 
                 <View style={{ alignItems: 'center', marginBottom: 10 }}>

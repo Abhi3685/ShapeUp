@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { View, StatusBar, Image, Text, TouchableOpacity, AppState } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react'
+import { View, StatusBar, Image, Text, TouchableOpacity, AppState, Alert, BackHandler } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import SoundPlayer from 'react-native-sound-player';
 import KeepAwake from 'react-native-keep-awake';
+import { useFocusEffect } from '@react-navigation/native';
 
 import cardio_exercises from '../data/cardio';
 
@@ -17,6 +18,17 @@ const Exercise = ({ navigation }) => {
     const [seconds, setSeconds] = useState(exercise.time ? exercise.time : -1);
     const [isActive, setIsActive] = useState(true);
     const [id, setId] = useState(-1);
+    
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = () => {
+                Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => navigation.goBack() }]); 
+                return true;
+            };
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+            return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        })
+    );
     
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -66,7 +78,7 @@ const Exercise = ({ navigation }) => {
             <View style={{ position: 'absolute', width: '100%', height: '55%', backgroundColor: '#28313B', borderBottomLeftRadius: 15, borderBottomRightRadius: 15 }}></View>
 
             <View style={{ alignItems: 'center', flex: 1, justifyContent: 'space-between', marginBottom: 25 }}>
-                <Icon name="keyboard-arrow-left" size={40} color="#fff" style={{ position: "absolute", left: 10, top: 15 }} />
+                <TouchableOpacity style={{ position: "absolute", left: 10, top: 15 }} onPress={() => Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => navigation.goBack() }])}><Icon name="keyboard-arrow-left" size={40} color="#fff" /></TouchableOpacity>
                 <Text style={{ fontSize: 20, marginTop: 20, color: '#fff' }}>Exercise {id+1}/{cardio_exercises.length}</Text>
                 <View style={{ width: '88%', alignItems: 'center', marginTop: 20 }}>
                     <Image source={exercise.gif} resizeMode="cover" style={{ width: '100%', height: 280 }} />

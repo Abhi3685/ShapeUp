@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { View, StatusBar, Image, Text, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState, useCallback } from 'react'
+import { View, StatusBar, Image, Text, TouchableOpacity, BackHandler, Alert } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient';
+import { useFocusEffect } from '@react-navigation/native';
 
 import cardio_exercises from '../data/cardio';
 
@@ -8,6 +9,17 @@ const Break = ({ route, navigation }) => {
     const [timeLeft, setTimeLeft] = useState(30);
     const { mode, id } = route.params;
     const exercise = cardio_exercises[id];
+
+    useFocusEffect(
+        useCallback(() => {
+            const onBackPress = () => {
+                Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => navigation.navigate('Exercises') }]); 
+                return true;
+            };
+            BackHandler.addEventListener('hardwareBackPress', onBackPress);
+            return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        })
+    );
 
     useEffect(() => {
         let interval = null;
