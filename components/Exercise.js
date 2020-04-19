@@ -6,9 +6,9 @@ import SoundPlayer from 'react-native-sound-player';
 import KeepAwake from 'react-native-keep-awake';
 import { useFocusEffect } from '@react-navigation/native';
 
-import cardio_exercises from '../data/cardio';
+import { cardio_exercises, abs_exercises, fullBody_exercises } from '../data/exercises';
 
-const Exercise = ({ navigation }) => {
+const Exercise = ({ route, navigation }) => {
     const [exercise, setExercise] = useState({
         name: '',
         desc: '',
@@ -18,6 +18,7 @@ const Exercise = ({ navigation }) => {
     const [seconds, setSeconds] = useState(exercise.time ? exercise.time : -1);
     const [isActive, setIsActive] = useState(true);
     const [id, setId] = useState(-1);
+    const [length, setLength] = useState(0);
     
     useFocusEffect(
         useCallback(() => {
@@ -29,26 +30,36 @@ const Exercise = ({ navigation }) => {
             return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
         })
     );
+
+    // SoundPlayer.playSoundFile('bg_audio', 'mp3');
+    // AppState.addEventListener('change', function(currentAppState) {
+    //     if(currentAppState == "background") {
+    //         SoundPlayer.pause();
+    //     } 
+    //     if(currentAppState == "active") {
+    //         SoundPlayer.resume();
+    //     }
+    // })
     
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
+            var exercises;
+            if(route.params.mode == 1){
+                exercises = cardio_exercises;
+            } else if(route.params.mode == 2){
+                exercises = abs_exercises;
+            } else if(route.params.mode == 3) {
+                exercises = fullBody_exercises;
+            }
+            setLength(exercises.length);
             setId(id => {
                 setExercise(() => {
-                    let exercise = cardio_exercises[id+1];
+                    let exercise = exercises[id+1];
                     if(exercise.time) setSeconds(exercise.time);
                     return exercise;
                 });
                 return id + 1;
             });
-            // SoundPlayer.playSoundFile('bg_audio', 'mp3');
-            // AppState.addEventListener('change', function(currentAppState) {
-            //     if(currentAppState == "background") {
-            //         SoundPlayer.pause();
-            //     } 
-            //     if(currentAppState == "active") {
-            //         SoundPlayer.resume();
-            //     }
-            // });
         });
     
         return unsubscribe;
@@ -66,7 +77,7 @@ const Exercise = ({ navigation }) => {
         if (seconds == 0){
             // Redirect to break screen
             clearInterval(interval);
-            id+1 === cardio_exercises.length ? navigation.navigate('Finish') : navigation.navigate('Break', { mode: 1, id: id + 1 })
+            id+1 === length ? navigation.navigate('Finish') : navigation.navigate('Break', { mode: route.params.mode, id: id + 1 })
         }
         return () => clearInterval(interval);
     }, [isActive, seconds]);
@@ -75,11 +86,11 @@ const Exercise = ({ navigation }) => {
         <>
             <StatusBar barStyle='light-content' backgroundColor="#28313B" />
 
-            <View style={{ position: 'absolute', width: '100%', height: '55%', backgroundColor: '#28313B', borderBottomLeftRadius: 15, borderBottomRightRadius: 15 }}></View>
+            <View style={{ position: 'absolute', width: '100%', height: '40%', backgroundColor: '#28313B', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}></View>
 
             <View style={{ alignItems: 'center', flex: 1, justifyContent: 'space-between', marginBottom: 25 }}>
                 <TouchableOpacity style={{ position: "absolute", left: 10, top: 15 }} onPress={() => Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => navigation.goBack() }])}><Icon name="keyboard-arrow-left" size={40} color="#fff" /></TouchableOpacity>
-                <Text style={{ fontSize: 20, marginTop: 20, color: '#fff' }}>Exercise {id+1}/{cardio_exercises.length}</Text>
+                <Text style={{ fontSize: 20, marginTop: 20, color: '#fff' }}>Exercise {id+1}/{length}</Text>
                 <View style={{ width: '88%', alignItems: 'center', marginTop: 20 }}>
                     <Image source={exercise.gif} resizeMode="cover" style={{ width: '100%', height: 280 }} />
                 </View>
@@ -93,7 +104,7 @@ const Exercise = ({ navigation }) => {
                     style={{ borderRadius: 15 }}
                 >
                     { exercise.reps ? 
-                    <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }} onPress={() => id+1 === cardio_exercises.length ? navigation.navigate('Finish') : navigation.navigate('Break', { mode: 1, id: id + 1 }) }>
+                    <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }} onPress={() => id+1 === length ? navigation.navigate('Finish') : navigation.navigate('Break', { mode: route.params.mode, id: id + 1 }) }>
                         <Text style={{ color: '#fff', paddingVertical: 4, paddingHorizontal: 50 }}> 
                             <Icon name="done" size={30} color="#fff" />
                         </Text>

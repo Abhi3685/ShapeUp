@@ -2,13 +2,38 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { View, StatusBar, Image, Text, TouchableOpacity, BackHandler, Alert } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient';
 import { useFocusEffect } from '@react-navigation/native';
+import KeepAwake from 'react-native-keep-awake';
 
-import cardio_exercises from '../data/cardio';
+import { cardio_exercises, abs_exercises, fullBody_exercises } from '../data/exercises';
 
 const Break = ({ route, navigation }) => {
     const [timeLeft, setTimeLeft] = useState(30);
     const { mode, id } = route.params;
-    const exercise = cardio_exercises[id];
+    const [exercise, setExercise] = useState({
+        name: '',
+        desc: '',
+        reps: 0,
+        gif: require('../assets/cardio_1.gif')
+    });
+
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            var exercises;
+            if(mode == 1){
+                exercises = cardio_exercises;
+            } else if(mode == 2){
+                exercises = abs_exercises;
+            } else if(mode == 3){
+                exercises = fullBody_exercises;
+            }
+            setExercise(() => {
+                let exercise = exercises[id];
+                return exercise;
+            });
+        });
+    
+        return unsubscribe;
+    }, [navigation]);
 
     useFocusEffect(
         useCallback(() => {
@@ -65,6 +90,8 @@ const Break = ({ route, navigation }) => {
                 </View>
                 <Image source={exercise.gif} style={{ width: '30%', height: 100 }} />
             </View>
+
+            <KeepAwake />
         </>
     );
 }

@@ -12,7 +12,7 @@ const Finish = ({ navigation }) => {
     useFocusEffect(
         useCallback(() => {
             const onBackPress = () => {
-                Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => navigation.navigate('Mode') }]); 
+                navigation.navigate('Mode');
                 return true;
             };
             BackHandler.addEventListener('hardwareBackPress', onBackPress);

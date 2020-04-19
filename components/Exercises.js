@@ -1,23 +1,53 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, StatusBar, Image, Text, Modal, TouchableOpacity, FlatList } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import exercises from '../data/cardio';
+import { cardio_exercises, abs_exercises, fullBody_exercises } from '../data/exercises';
 
-const Exercises = ({ navigation }) => {
+const Exercises = ({ route, navigation }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalDataIdx, setModalDataIdx] = useState(0);
+    const [exercises, setExercises] = useState([{
+        id: 0,
+        name: '',
+        desc: '',
+        time: 0,
+        gif: require('../assets/cardio_1.gif')
+    }]);
+
+    useEffect(() => {
+        if(route.params.mode == 1){            
+            setExercises(cardio_exercises);
+        } else if(route.params.mode == 2){
+            setExercises(abs_exercises);
+        } else if(route.params.mode == 3){
+            setExercises(fullBody_exercises);
+        }
+    }, []);
 
     return (
         <>
             <StatusBar barStyle='light-content' backgroundColor="#000" />
 
             <View style={{ position: "relative", marginBottom: 8 }}>
-                <Image source={require('../assets/mode_1.jpg')} style={{ width: '100%', height: 180, borderBottomLeftRadius: 15, borderBottomRightRadius: 15 }} />
-                <Text style={{ position: "absolute", color: "#fff", bottom: 40, left: 20, fontSize: 23, fontWeight: "bold" }}>Cardio Warmup</Text>
-                <Text style={{ position: "absolute", color: "#fff", bottom: 20, left: 20, fontSize: 16 }}>Estimated Duration: 10 - 15 Minutes</Text>
+                <Image source={
+                    route.params.mode == 1 && require('../assets/mode_1.jpg') || 
+                    route.params.mode == 2 && require('../assets/mode_2.jpg') ||
+                    route.params.mode == 3 && require('../assets/mode_3.jpg')
+                } style={{ width: '100%', height: 180, borderBottomLeftRadius: 15, borderBottomRightRadius: 15 }} />
+                <Text style={{ position: "absolute", color: "#fff", bottom: 40, left: 20, fontSize: 23, fontWeight: "bold" }}>
+                    { route.params.mode == 1 && 'Cardio Warmup' }
+                    { route.params.mode == 2 && 'Six Pack Abs' }
+                    { route.params.mode == 3 && 'Full Body Challenge' }
+                </Text>
+                <Text style={{ position: "absolute", color: "#fff", bottom: 20, left: 20, fontSize: 16 }}>
+                    Estimated Duration: 
+                    { route.params.mode == 1 && ' 10 - 15 Minutes' }
+                    { route.params.mode == 2 && ' 40 - 45 Minutes' }
+                    { route.params.mode == 3 && ' 45 - 50 Minutes' }
+                </Text>
                 <TouchableOpacity style={{ position: "absolute", left: 5, top: 15 }} onPress={() => navigation.goBack()}><Icon name="keyboard-arrow-left" size={40} color="#fff" /></TouchableOpacity>
             </View>
 
@@ -48,7 +78,7 @@ const Exercises = ({ navigation }) => {
                             onPress={() => {
                                 AsyncStorage.setItem('StartTime', new Date().getTime().toString());
                                 AsyncStorage.setItem('Exercises', exercises.length.toString());
-                                navigation.navigate('Exercise', { mode: '1' })
+                                navigation.navigate('Exercise', { mode: route.params.mode })
                             }}>
                             <Text style={{ fontSize: 17, color: '#fff', padding: 4 }}>Start Workout</Text>
                         </TouchableOpacity>
