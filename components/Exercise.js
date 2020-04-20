@@ -19,27 +19,31 @@ const Exercise = ({ route, navigation }) => {
     const [isActive, setIsActive] = useState(true);
     const [id, setId] = useState(-1);
     const [length, setLength] = useState(0);
+
+    useEffect(() => {
+        AppState.addEventListener("change", _handleAppStateChange);
+        return () => AppState.removeEventListener("change", _handleAppStateChange);
+    }, []);
+
+    const _handleAppStateChange = nextAppState => {
+        if (nextAppState === "background") {
+            SoundPlayer.pause();
+        }
+        if (nextAppState === "active") {
+            SoundPlayer.resume();
+        }
+    };
     
     useFocusEffect(
         useCallback(() => {
             const onBackPress = () => {
-                Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => navigation.goBack() }]); 
+                Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => { SoundPlayer.stop(); navigation.goBack(); } }]); 
                 return true;
             };
             BackHandler.addEventListener('hardwareBackPress', onBackPress);
             return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
         })
     );
-
-    // SoundPlayer.playSoundFile('bg_audio', 'mp3');
-    // AppState.addEventListener('change', function(currentAppState) {
-    //     if(currentAppState == "background") {
-    //         SoundPlayer.pause();
-    //     } 
-    //     if(currentAppState == "active") {
-    //         SoundPlayer.resume();
-    //     }
-    // })
     
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -60,6 +64,13 @@ const Exercise = ({ route, navigation }) => {
                 });
                 return id + 1;
             });
+            
+            SoundPlayer.playSoundFile('bg_audio', 'mp3');
+            SoundPlayer.setVolume(100);
+            _onFinishedPlayingSubscription = SoundPlayer.addEventListener('FinishedPlaying', ({ success }) => {
+                SoundPlayer.play();
+            });
+
         });
     
         return unsubscribe;
@@ -77,7 +88,12 @@ const Exercise = ({ route, navigation }) => {
         if (seconds == 0){
             // Redirect to break screen
             clearInterval(interval);
-            id+1 === length ? navigation.navigate('Finish') : navigation.navigate('Break', { mode: route.params.mode, id: id + 1 })
+            SoundPlayer.stop(); 
+            if(id+1 === length){ 
+                navigation.replace('Finish'); 
+            } else {
+                navigation.navigate('Break', { mode: route.params.mode, id: id + 1 });
+            }
         }
         return () => clearInterval(interval);
     }, [isActive, seconds]);
@@ -89,7 +105,7 @@ const Exercise = ({ route, navigation }) => {
             <View style={{ position: 'absolute', width: '100%', height: '40%', backgroundColor: '#28313B', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}></View>
 
             <View style={{ alignItems: 'center', flex: 1, justifyContent: 'space-between', marginBottom: 25 }}>
-                <TouchableOpacity style={{ position: "absolute", left: 10, top: 15 }} onPress={() => Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => navigation.goBack() }])}><Icon name="keyboard-arrow-left" size={40} color="#fff" /></TouchableOpacity>
+                <TouchableOpacity style={{ position: "absolute", left: 10, top: 15 }} onPress={() => Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => { SoundPlayer.stop(); navigation.goBack(); } }])}><Icon name="keyboard-arrow-left" size={40} color="#fff" /></TouchableOpacity>
                 <Text style={{ fontSize: 20, marginTop: 20, color: '#fff' }}>Exercise {id+1}/{length}</Text>
                 <View style={{ width: '88%', alignItems: 'center', marginTop: 20 }}>
                     <Image source={exercise.gif} resizeMode="cover" style={{ width: '100%', height: 280 }} />
@@ -104,7 +120,14 @@ const Exercise = ({ route, navigation }) => {
                     style={{ borderRadius: 15 }}
                 >
                     { exercise.reps ? 
-                    <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }} onPress={() => id+1 === length ? navigation.navigate('Finish') : navigation.navigate('Break', { mode: route.params.mode, id: id + 1 }) }>
+                    <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }} onPress={() => { 
+                            SoundPlayer.stop();
+                            if(id+1 === length) { 
+                                navigation.replace('Finish'); 
+                            } else { 
+                                navigation.navigate('Break', { mode: route.params.mode, id: id + 1 });
+                            } 
+                        } }>
                         <Text style={{ color: '#fff', paddingVertical: 4, paddingHorizontal: 50 }}> 
                             <Icon name="done" size={30} color="#fff" />
                         </Text>

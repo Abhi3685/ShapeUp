@@ -35,7 +35,7 @@ class Mode extends Component {
                         <View style={{ marginBottom: 20, elevation: 10, backgroundColor: "#fff", borderRadius: 15 }}>
                             <Image source={require('../assets/mode_3.jpg')} style={{ width: 300, height: 150, borderRadius: 15, position: 'relative' }} />
                             <Text style= {{ fontSize: 22, fontWeight: 'bold', position: 'absolute', color: "#fff", left: 20, bottom: 30 }}>Full Body Challenge</Text>
-                            <Text style= {{ fontSize: 12, position: 'absolute', color: "#fff", left: 21, bottom: 15 }}>Estimated Duration: 45 - 50 Minutes</Text>
+                            <Text style= {{ fontSize: 12, position: 'absolute', color: "#fff", left: 21, bottom: 15 }}>Estimated Duration: 30 - 40 Minutes</Text>
                         </View>
                     </TouchableWithoutFeedback>
                 </View>

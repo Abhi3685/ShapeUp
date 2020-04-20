@@ -46,7 +46,7 @@ const Exercises = ({ route, navigation }) => {
                     Estimated Duration: 
                     { route.params.mode == 1 && ' 10 - 15 Minutes' }
                     { route.params.mode == 2 && ' 20 - 30 Minutes' }
-                    { route.params.mode == 3 && ' 45 - 50 Minutes' }
+                    { route.params.mode == 3 && ' 30 - 40 Minutes' }
                 </Text>
                 <TouchableOpacity style={{ position: "absolute", left: 5, top: 15 }} onPress={() => navigation.goBack()}><Icon name="keyboard-arrow-left" size={40} color="#fff" /></TouchableOpacity>
             </View>
