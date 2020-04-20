@@ -7,7 +7,7 @@ const Home = ({ navigation }) => {
         hideNavigationBar();
         setTimeout(() => {
             navigation.replace('Mode');
-        }, 5000);
+        }, 3500);
     }, []);
 
     return (

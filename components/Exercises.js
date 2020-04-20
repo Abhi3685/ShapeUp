@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, StatusBar, Image, Text, Modal, TouchableOpacity, FlatList } from 'react-native'
+import { View, StatusBar, Image, Text, Modal, TouchableWithoutFeedback, FlatList, TouchableOpacity } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -55,16 +55,17 @@ const Exercises = ({ route, navigation }) => {
                 data={exercises}
                 initialNumToRender={0}
                 keyExtractor={(item) => item.id.toString()}
+                ItemSeparatorComponent={ () => <View style={{ flex: 1, height: 1, width: "90%", marginHorizontal: 20, backgroundColor: "#aaa" }} /> }
                 renderItem={( { item: exercise, index } ) => (
-                    <TouchableOpacity onPress={() => { setModalDataIdx(index); setIsModalVisible(true); }}>
-                        <View style={{ flex: 1, flexDirection: 'row', marginHorizontal: 10, borderRadius: 10, borderBottomWidth: 1, borderBottomColor: '#aaa', paddingVertical: 10 }}>
+                    <TouchableWithoutFeedback onPress={() => { setModalDataIdx(index); setIsModalVisible(true); }}>
+                        <View style={{ flex: 1, flexDirection: 'row', marginHorizontal: 20, paddingVertical: 10 }}>
                             <Image resizeMode="cover" source={exercise.gif} style={{ width: '30%', height: 80 }} />
                             <View style={{ paddingLeft: 20 }}>
                                 <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 5 }}>{exercise.name}</Text>
                                 <Text style={{ fontSize: 18, marginTop: 10, color: '#aaa' }}>{exercise.time ? '00:' + exercise.time : 'x' + exercise.reps}</Text>
                             </View>
                         </View>
-                    </TouchableOpacity>
+                    </TouchableWithoutFeedback>
                 )}
             />
 
