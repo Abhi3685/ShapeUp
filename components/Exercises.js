@@ -45,7 +45,7 @@ const Exercises = ({ route, navigation }) => {
                 <Text style={{ position: "absolute", color: "#fff", bottom: 20, left: 20, fontSize: 16 }}>
                     Estimated Duration: 
                     { route.params.mode == 1 && ' 10 - 15 Minutes' }
-                    { route.params.mode == 2 && ' 40 - 45 Minutes' }
+                    { route.params.mode == 2 && ' 20 - 30 Minutes' }
                     { route.params.mode == 3 && ' 45 - 50 Minutes' }
                 </Text>
                 <TouchableOpacity style={{ position: "absolute", left: 5, top: 15 }} onPress={() => navigation.goBack()}><Icon name="keyboard-arrow-left" size={40} color="#fff" /></TouchableOpacity>
@@ -61,7 +61,7 @@ const Exercises = ({ route, navigation }) => {
                         <View style={{ flex: 1, flexDirection: 'row', marginHorizontal: 20, paddingVertical: 10 }}>
                             <Image resizeMode="cover" source={exercise.gif} style={{ width: '30%', height: 80 }} />
                             <View style={{ paddingLeft: 20 }}>
-                                <Text style={{ fontSize: 20, fontWeight: "bold", marginTop: 5 }}>{exercise.name}</Text>
+                                <Text style={{ fontSize: 18, fontWeight: "bold", marginTop: 5, textTransform: 'uppercase' }}>{exercise.name}</Text>
                                 <Text style={{ fontSize: 18, marginTop: 10, color: '#aaa' }}>{exercise.time ? '00:' + exercise.time : 'x' + exercise.reps}</Text>
                             </View>
                         </View>

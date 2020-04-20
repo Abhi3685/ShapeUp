@@ -27,7 +27,7 @@ class Mode extends Component {
                         <View style={{ marginBottom: 20, elevation: 10, backgroundColor: "#fff", borderRadius: 15 }}>
                             <Image source={require('../assets/mode_2.jpg')} style={{ width: 300, height: 150, borderRadius: 15, position: 'relative' }} />
                             <Text style= {{ fontSize: 22, fontWeight: 'bold', position: 'absolute', color: "#fff", left: 20, bottom: 30 }}>Six Pack Abs</Text>
-                            <Text style= {{ fontSize: 12, position: 'absolute', color: "#fff", left: 21, bottom: 15 }}>Estimated Duration: 40 - 45 Minutes</Text>
+                            <Text style= {{ fontSize: 12, position: 'absolute', color: "#fff", left: 21, bottom: 15 }}>Estimated Duration: 20 - 30 Minutes</Text>
                         </View>
                     </TouchableWithoutFeedback>
 
