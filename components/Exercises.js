@@ -94,8 +94,8 @@ const Exercises = ({ route, navigation }) => {
             >
                 <View style={{ backgroundColor: 'rgba(0,0,0,0.6)', flex: 1 }}>
                     <View style={{ flex: 1, marginVertical: 100, marginHorizontal: 40, backgroundColor: '#fff', borderRadius: 10, paddingHorizontal: 25, elevation: 10, position: 'relative' }}>
-                        <Image source={exercises[modalDataIdx].gif} style={{ width: '100%', height: 250 }} />
-                        <Text style={{ fontSize: 25, fontWeight: 'bold', borderTopWidth: 1, borderTopColor: '#aaa', paddingTop: 10, marginBottom: 10 }}>{exercises[modalDataIdx].name}</Text>
+                        <Image resizeMode="cover" source={exercises[modalDataIdx].gif} style={{ width: '100%', height: 250, marginTop: 15 }} />
+                        <Text style={{ fontSize: 25, fontWeight: 'bold', borderTopWidth: 1, borderTopColor: '#aaa', paddingTop: 10, marginBottom: 10, marginTop: 10 }}>{exercises[modalDataIdx].name}</Text>
                         <Text style={{ color: '#aaa' }}>{exercises[modalDataIdx].desc}</Text>
                         <LinearGradient
                             colors={['#28313B', '#485461']}
