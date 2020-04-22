@@ -72,7 +72,6 @@ const Exercise = ({ route, navigation }) => {
             });
 
         });
-    
         return unsubscribe;
     }, [navigation]);
 
@@ -132,7 +131,8 @@ const Exercise = ({ route, navigation }) => {
                             <Icon name="done" size={30} color="#fff" />
                         </Text>
                     </TouchableOpacity> :
-                    <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }} onPress={() => setIsActive(isActive => !isActive)}>
+                    <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }} 
+                        onPress={() => setIsActive(isActive => { if(isActive == true) SoundPlayer.pause(); else SoundPlayer.resume(); return !isActive; })}>
                         <Text style={{ color: '#fff', paddingVertical: 4, paddingHorizontal: 50 }}> 
                             { exercise.reps ? <Icon name="done" size={30} color="#fff" /> : <Icon name={isActive ? "pause" : "play-arrow"} size={30} color="#fff" /> }
                         </Text>

@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react'
-import { View, StatusBar, Image, Text, TouchableOpacity, BackHandler, Alert } from 'react-native'
+import { View, StatusBar, Image, Text, TouchableOpacity, BackHandler, Alert, AppState } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient';
 import { useFocusEffect } from '@react-navigation/native';
 import KeepAwake from 'react-native-keep-awake';
+import SoundPlayer from 'react-native-sound-player';
 
 import { cardio_exercises, abs_exercises, fullBody_exercises } from '../data/exercises';
 
@@ -15,6 +16,20 @@ const Break = ({ route, navigation }) => {
         reps: 0,
         gif: require('../assets/cardio_1.gif')
     });
+
+    useEffect(() => {
+        AppState.addEventListener("change", _handleAppStateChange);
+        return () => AppState.removeEventListener("change", _handleAppStateChange);
+    }, []);
+
+    const _handleAppStateChange = nextAppState => {
+        if (nextAppState === "background") {
+            SoundPlayer.pause();
+        }
+        if (nextAppState === "active") {
+            SoundPlayer.resume();
+        }
+    };
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
@@ -31,6 +46,12 @@ const Break = ({ route, navigation }) => {
                 return exercise;
             });
         });
+
+        SoundPlayer.playSoundFile('tick', 'mp3');
+        SoundPlayer.setVolume(100);
+        _onFinishedPlayingSubscription = SoundPlayer.addEventListener('FinishedPlaying', ({ success }) => {
+            SoundPlayer.play();
+        });
     
         return unsubscribe;
     }, [navigation]);
@@ -38,7 +59,7 @@ const Break = ({ route, navigation }) => {
     useFocusEffect(
         useCallback(() => {
             const onBackPress = () => {
-                Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => navigation.navigate('Exercises') }]); 
+                Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => { SoundPlayer.stop(); navigation.navigate('Exercises'); } }]); 
                 return true;
             };
             BackHandler.addEventListener('hardwareBackPress', onBackPress);
@@ -54,7 +75,8 @@ const Break = ({ route, navigation }) => {
             }, 1000);
         } else {
             // Redirect to next exercise
-            navigation.goBack()
+            SoundPlayer.stop();
+            navigation.goBack();
             clearInterval(interval);
         }
         return () => clearInterval(interval);
@@ -76,7 +98,7 @@ const Break = ({ route, navigation }) => {
                     style={{ borderRadius: 15, width: '40%' }}
                 >
                     <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }}
-                        onPress={() => navigation.goBack()}>
+                        onPress={() => { SoundPlayer.stop(); navigation.goBack(); }}>
                         <Text style={{ fontSize: 17, color: '#fff', padding: 4 }}>Skip</Text>
                     </TouchableOpacity>
                 </LinearGradient>
