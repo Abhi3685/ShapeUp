@@ -111,7 +111,7 @@ const Break = ({ route, navigation }) => {
             <View style={{ flexDirection: 'row' }}>
                 <View style={{ width: '70%', paddingHorizontal: 15, paddingVertical: 8, height: RFPercentage(15) }}>
                     <Text style={{ color: '#aaa', fontSize: RFPercentage(2.4) }}>Up Next</Text>
-                    <Text style={{ fontSize: RFPercentage(2.8), fontWeight: 'bold', marginBottom: 7 }}>{exercise.name}</Text>
+                    <Text style={{ fontSize: RFPercentage(2.8), fontWeight: 'bold' }}>{exercise.name}</Text>
                     <Text style={{ color: '#00f', fontSize: RFPercentage(2.8), fontWeight: 'bold' }}>{ exercise.reps ? 'x' + exercise.reps : '00:' + exercise.time }</Text>
                 </View>
                 <Image source={exercise.gif} style={{ width: '30%', height: RFPercentage(15) }} />
