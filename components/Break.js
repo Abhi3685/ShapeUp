@@ -4,6 +4,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useFocusEffect } from '@react-navigation/native';
 import KeepAwake from 'react-native-keep-awake';
 import SoundPlayer from 'react-native-sound-player';
+import { RFPercentage } from "react-native-responsive-fontsize";
+import { hideNavigationBar } from 'react-native-navigation-bar-color';
 
 import { cardio_exercises, abs_exercises, fullBody_exercises } from '../data/exercises';
 
@@ -27,6 +29,7 @@ const Break = ({ route, navigation }) => {
             SoundPlayer.pause();
         }
         if (nextAppState === "active") {
+            hideNavigationBar();
             SoundPlayer.resume();
         }
     };
@@ -63,6 +66,7 @@ const Break = ({ route, navigation }) => {
                 return true;
             };
             BackHandler.addEventListener('hardwareBackPress', onBackPress);
+            hideNavigationBar();
             return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
         })
     );
@@ -84,14 +88,14 @@ const Break = ({ route, navigation }) => {
 
     return (
         <>
-            <StatusBar barStyle='dark-content' backgroundColor="#fff" />
+            <StatusBar hidden={true} />
 
-            <View style={{ paddingHorizontal: 20, paddingVertical: 15 }}>
-                <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Break Time</Text>
+            <View style={{ paddingHorizontal: 20, paddingVertical: 20 }}>
+                <Text style={{ fontSize: RFPercentage(3.2), fontWeight: 'bold' }}>Break Time</Text>
             </View>
 
             <View style={{ backgroundColor: 'rgba(0,0,0,0.05)', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ fontSize: 30, fontWeight: 'bold', marginBottom: 10 }}>{timeLeft}s Left</Text>
+                <Text style={{ fontSize: RFPercentage(4.2), fontWeight: 'bold', marginBottom: 10 }}>{timeLeft}s Left</Text>
 
                 <LinearGradient
                     colors={['#28313B', '#485461']}
@@ -99,18 +103,18 @@ const Break = ({ route, navigation }) => {
                 >
                     <TouchableOpacity style={{ padding: 10, borderRadius: 15, alignItems: 'center' }}
                         onPress={() => { SoundPlayer.stop(); navigation.goBack(); }}>
-                        <Text style={{ fontSize: 17, color: '#fff', padding: 4 }}>Skip</Text>
+                        <Text style={{ fontSize: RFPercentage(2.4), color: '#fff', padding: 4 }}>Skip</Text>
                     </TouchableOpacity>
                 </LinearGradient>
             </View>
 
             <View style={{ flexDirection: 'row' }}>
-                <View style={{ width: '70%', paddingHorizontal: 15, paddingVertical: 8 }}>
-                    <Text style={{ color: '#aaa', fontSize: 18 }}>Up Next</Text>
-                    <Text style={{ fontSize: 20, fontWeight: 'bold' }}>{exercise.name}</Text>
-                    <Text style={{ color: '#00f', fontSize: 18, fontWeight: 'bold' }}>{ exercise.reps ? 'x' + exercise.reps : '00:' + exercise.time }</Text>
+                <View style={{ width: '70%', paddingHorizontal: 15, paddingVertical: 8, height: RFPercentage(15) }}>
+                    <Text style={{ color: '#aaa', fontSize: RFPercentage(2.4) }}>Up Next</Text>
+                    <Text style={{ fontSize: RFPercentage(2.8), fontWeight: 'bold', marginBottom: 7 }}>{exercise.name}</Text>
+                    <Text style={{ color: '#00f', fontSize: RFPercentage(2.8), fontWeight: 'bold' }}>{ exercise.reps ? 'x' + exercise.reps : '00:' + exercise.time }</Text>
                 </View>
-                <Image source={exercise.gif} style={{ width: '30%', height: 100 }} />
+                <Image source={exercise.gif} style={{ width: '30%', height: RFPercentage(15) }} />
             </View>
 
             <KeepAwake />

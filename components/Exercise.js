@@ -5,6 +5,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import SoundPlayer from 'react-native-sound-player';
 import KeepAwake from 'react-native-keep-awake';
 import { useFocusEffect } from '@react-navigation/native';
+import { RFPercentage } from "react-native-responsive-fontsize";
+import { hideNavigationBar } from 'react-native-navigation-bar-color';
 
 import { cardio_exercises, abs_exercises, fullBody_exercises } from '../data/exercises';
 
@@ -30,6 +32,7 @@ const Exercise = ({ route, navigation }) => {
             SoundPlayer.pause();
         }
         if (nextAppState === "active") {
+            hideNavigationBar();
             SoundPlayer.resume();
         }
     };
@@ -41,6 +44,7 @@ const Exercise = ({ route, navigation }) => {
                 return true;
             };
             BackHandler.addEventListener('hardwareBackPress', onBackPress);
+            hideNavigationBar();
             return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
         })
     );
@@ -99,20 +103,20 @@ const Exercise = ({ route, navigation }) => {
 
     return (
         <>
-            <StatusBar barStyle='light-content' backgroundColor="#28313B" />
+            <StatusBar hidden={true} />
 
-            <View style={{ position: 'absolute', width: '100%', height: '40%', backgroundColor: '#28313B', borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}></View>
+            <View style={{ position: 'absolute', width: '100%', height: '40%', backgroundColor: '#28313B', borderBottomLeftRadius: 10, borderBottomRightRadius: 10 }}></View>
 
-            <View style={{ alignItems: 'center', flex: 1, justifyContent: 'space-between', marginBottom: 25 }}>
+            <View style={{ alignItems: 'center', flex: 1, justifyContent: 'space-between', marginBottom: 45 }}>
                 <TouchableOpacity style={{ position: "absolute", left: 10, top: 15 }} onPress={() => Alert.alert('Quit Workout', 'Are you sure you want to quit workout?', [{ text: 'No' }, { text: 'Yes', onPress: () => { SoundPlayer.stop(); navigation.goBack(); } }])}><Icon name="keyboard-arrow-left" size={40} color="#fff" /></TouchableOpacity>
-                <Text style={{ fontSize: 20, marginTop: 20, color: '#fff' }}>Exercise {id+1}/{length}</Text>
+                <Text style={{ fontSize: RFPercentage(2.8), marginTop: 20, color: '#fff' }}>Exercise {id+1}/{length}</Text>
                 <View style={{ width: '88%', alignItems: 'center', marginTop: 20 }}>
-                    <Image source={exercise.gif} resizeMode="cover" style={{ width: '100%', height: 280 }} />
+                    <Image source={exercise.gif} resizeMode="cover" style={{ width: '100%', height: RFPercentage(45) }} />
                 </View>
                 <View style={{ alignItems: 'center' }}>
-                    <Text style={{ textTransform: 'uppercase', fontSize: 28, fontWeight: 'bold', marginTop: 50 }}>{ exercise.name }</Text>
-                    <Text style={{ paddingHorizontal: 25, textAlign: 'center', marginTop: 10, fontSize: 15, color: '#aaa' }}>{ exercise.desc }</Text>
-                    <Text style={{ fontSize: 60, fontWeight: 'bold', color: '#aaa' }}>{ exercise.reps ? 'x ' + exercise.reps : seconds + 's' }</Text>
+                    <Text style={{ textTransform: 'uppercase', fontSize: RFPercentage(3.7), fontWeight: 'bold' }}>{ exercise.name }</Text>
+                    <Text style={{ paddingHorizontal: 25, textAlign: 'center', marginTop: 5, fontSize: RFPercentage(2.2), color: '#aaa' }}>{ exercise.desc }</Text>
+                    <Text style={{ fontSize: RFPercentage(8), fontWeight: 'bold', color: '#aaa' }}>{ exercise.reps ? 'x ' + exercise.reps : seconds + 's' }</Text>
                 </View>
                 <LinearGradient
                     colors={['#28313B', '#485461']}
